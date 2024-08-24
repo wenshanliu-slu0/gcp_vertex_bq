@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a class="anchor-pos" id="top"></a>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand anchor" href="#top">BigQuery Table Statistics</a>
+    </div>
+  </div>
+</nav>
+<div class="content">
+  <div class="container">
+    <div class="row header">
+      <a class="anchor-pos" id="overview"></a>
+      <h1 class="page-header">Overview</h1>
+    </div>
+    <div>
+      <div class="row spacing">
+        <div>
+          <p class="h4">Table Statistics</p>
+          <table class="table">
+            <tbody>
+              <tr>
+                <th>Table ID</th>
+                <td>{{ table_id }}</td>
+              </tr>
+              <tr>
+                <th>Number of variables</th>
+                <td>{{ number_of_variables }}</td>
+              </tr>
+              <tr>
+                <th>Number of observations</th>
+                <td>{{ number_of_observations }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row header">
+      <a class="anchor-pos" id="Columns"></a>
+      <h1 class="page-header">Columns</h1>
+    </div>
+    {% for variable in variables %}
+      <div class="row spacing">
+        <div>
+          <p class="h4">{{ variable['name'] }}</p>
+          {% if variable['type'] == 'not_supportted' %}
+            <p class="h5">Type Not Supported</p>
+          {% else %}
+            <div class="col-sm-3">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <th>Observations</th>
+                    <td>{{ variable['observations'] }}</td>
+                  </tr>
+                  <tr>
+                    <th>Distinct Count</th>
+                    <td>{{ variable['Distinct_Count'] }}</td>
+                  </tr>
+                  <tr>
+                    <th>Distinct Count (%)</th>
+                    <td>{{ variable['Distinct_Count_Pct'] }}%</td>
+                  </tr>
+                  <tr>
+                    <th>Missing Count</th>
+                    <td>{{ variable['Is_Missing_Count'] }}</td>
+                  </tr>
+                  <tr>
+                    <th>Missing Count (%)</th>
+                    <td>{{ variable['Is_Missing_Count_Pct'] }}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            {% if variable['type'] == 'numeric' %}
+              <div class="col-sm-3">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <th>Infinite Count</th>
+                      <td>{{ variable['Is_Infinite_Count'] }}</td>
+                    </tr>
+                    <tr>
+                      <th>Infinite Count (%)</th>
+                      <td>{{ variable['Is_Infinite_Count_Pct'] }}%</td>
+                    </tr>
+                    <tr>
+                      <th>Zero Count</th>
+                      <td>{{ variable['Zero_Count'] }}</td>
+                    </tr>
+                    <tr>
+                      <th>Zero Count (%)</th>
+                      <td>{{ variable['Zero_Count_Pct'] }}%</td>
+                    </tr>
+                    <tr>
+                      <th>Average</th>
+                      <td>{{ variable['Average'] }}</td>
+                    </tr>
+                    <tr>
+                      <th>Minimum</th>
+                      <td>{{ variable['Minimum'] }}</td>
+                    </tr>
+                    <tr>
+                      <th>Maximum</th>
+                      <td>{{ variable['Maximum'] }}</td>
+                    </tr>
+                    <tr>
+                      <th>Negative Count</th>
+                      <td>{{ variable['Negative_Count'] }}</td>
+                    </tr>
+                    <tr>
+                      <th>Negative Count (%)</th>
+                      <td>{{ variable['Negative_Count_Pct'] }}%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            {% endif %}
+            <div class="col-sm-3 {% if variable['type'] != 'numeric' %} col-sm-offset-3 {% endif %}">
+              <img src="{{ variable['counts_img'] }}"/>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
